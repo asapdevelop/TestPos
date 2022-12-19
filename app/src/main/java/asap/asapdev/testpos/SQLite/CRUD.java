@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import asap.asapdev.testpos.Model.Ent_Detail_Pembelian;
 import asap.asapdev.testpos.Model.Ent_Detail_Penjualan;
 import asap.asapdev.testpos.Model.Ent_Pembelian;
 import asap.asapdev.testpos.Model.Ent_Penjualan;
+import asap.asapdev.testpos.Util.ListTemporary;
 import asap.asapdev.testpos.Util.SharedPref;
 
 public class CRUD {
@@ -22,11 +24,13 @@ public class CRUD {
     Helper helper;
     SharedPref sharedPref;
     Context context;
+    ListTemporary listTemporary;
 
     public CRUD(Context context) {
         helper = new Helper(context);
         sharedPref = new SharedPref(context);
         this.context = context;
+        listTemporary = new ListTemporary();
     }
 
     //Insert Barang
@@ -60,14 +64,25 @@ public class CRUD {
         contentValues.put(Helper.BAYAR, penjualan.getBayar());
         contentValues.put(Helper.KEMBALIAN, penjualan.getKembalian());
         long result = db.insert(Helper.TABLE_PENJUALAN, null, contentValues);
+        Log.d(TAG, "InsertData_Penjualan: " + result);
         return result;
+    }
+
+    //Update Stok
+    public long Update_Stok(String value, String idBarang) {
+        SQLiteDatabase dbb = helper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(Helper.JUMLAH_BARANG, value);
+
+        long update_stok = dbb.update(Helper.TABLE_BARANG, contentValues, helper.KODE_BARANG + "=?", new String[]{idBarang});
+        return update_stok;
     }
 
     //Insert Detail Penjualan
     public long InsertData_DetailPenjualan(Ent_Detail_Penjualan detailPenjualan) {
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(Helper.FAKTUR_PENJUALAN, detailPenjualan.getFaktur_penjualan());
+        contentValues.put(Helper.FAKTUR_PENJUALAN, listTemporary.lastId);
         contentValues.put(Helper.KODE_BARANG_DETAIL_PENJUALAN, detailPenjualan.getKode_barang());
         contentValues.put(Helper.HARGA_JUAL_DETAIL_PENJUALAN, detailPenjualan.getHarga_jual());
         contentValues.put(Helper.JUMLAH_BARANG_DETAIL_PENJUALAN, detailPenjualan.getJumlah());
@@ -190,4 +205,6 @@ public class CRUD {
         }
         return list;
     }
+
+
 }

@@ -51,7 +51,6 @@ public class Helper extends SQLiteOpenHelper{
     public static final String TABLE_DETAIL_PENJUALAN = "tb_detail_penjualan";
     public static final String ID_DETAIL_PENJUALAN = "id_detail_penjualan";
     public static final String KODE_BARANG_DETAIL_PENJUALAN = "kode_barang_detail_penjualan";
-    public static final String NAMA_BARANG_DETAIL_PENJUALAN = "nama_barang_detail_penjualan";
     public static final String HARGA_JUAL_DETAIL_PENJUALAN = "harga_jual_detail_penjualan";
     public static final String JUMLAH_BARANG_DETAIL_PENJUALAN = "jumlah_barang_detail_penjualan";
     public static final String SUB_TOTAL_DETAIL_PENJUALAN = "sub_total_detail_penjualan";
@@ -59,7 +58,6 @@ public class Helper extends SQLiteOpenHelper{
             + ID_DETAIL_PENJUALAN + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + FAKTUR_PENJUALAN + " VARCHAR(10), "
             + KODE_BARANG_DETAIL_PENJUALAN + " VARCHAR(10), "
-            + NAMA_BARANG_DETAIL_PENJUALAN + " VARCHAR(50), "
             + HARGA_JUAL_DETAIL_PENJUALAN + " INTEGER, "
             + JUMLAH_BARANG_DETAIL_PENJUALAN + " INTEGER, "
             + SUB_TOTAL_DETAIL_PENJUALAN + " INTEGER);";
@@ -82,7 +80,6 @@ public class Helper extends SQLiteOpenHelper{
     public static final String TABLE_DETAIL_PEMBELIAN = "tb_detail_pembelian";
     public static final String ID_DETAIL_PEMBELIAN = "id_detail_pembelian";
     public static final String KODE_BARANG_DETAIL_PEMBELIAN = "kode_barang_detail_pembelian";
-    public static final String NAMA_BARANG_DETAIL_PEMBELIAN = "nama_barang_detail_pembelian";
     public static final String HARGA_BELI_DETAIL_PEMBELIAN = "harga_beli_detail_pembelian";
     public static final String JUMLAH_BARANG_DETAIL_PEMBELIAN = "jumlah_barang_detail_pembelian";
     public static final String SUB_TOTAL_DETAIL_PEMBELIAN = "sub_total_detail_pembelian";
@@ -90,7 +87,6 @@ public class Helper extends SQLiteOpenHelper{
             + ID_DETAIL_PEMBELIAN + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + FAKTUR_PEMBELIAN + " VARCHAR(10), "
             + KODE_BARANG_DETAIL_PEMBELIAN + " VARCHAR(10), "
-            + NAMA_BARANG_DETAIL_PEMBELIAN + " VARCHAR(50), "
             + HARGA_BELI_DETAIL_PEMBELIAN + " INTEGER, "
             + JUMLAH_BARANG_DETAIL_PEMBELIAN + " INTEGER, "
             + SUB_TOTAL_DETAIL_PEMBELIAN + " INTEGER);";

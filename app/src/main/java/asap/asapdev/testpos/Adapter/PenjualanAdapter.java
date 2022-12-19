@@ -1,6 +1,7 @@
 package asap.asapdev.testpos.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,21 +13,29 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import asap.asapdev.testpos.Model.Ent_Barang;
+import asap.asapdev.testpos.Model.Ent_Detail_Penjualan;
+import asap.asapdev.testpos.Model.Ent_Penjualan;
 import asap.asapdev.testpos.R;
 import asap.asapdev.testpos.SQLite.CRUD;
+import asap.asapdev.testpos.Util.ListTemporary;
 
 public class PenjualanAdapter extends RecyclerView.Adapter<PenjualanAdapter.Holder> {
+    private static final String TAG = "PenjualanAdapter";
     private Context context;
     private List<Ent_Barang> barangList;
     private CRUD crud;
+    private ListTemporary listTemporary;
 
-    public PenjualanAdapter(Context context, List<Ent_Barang> barangList, CRUD crud) {
+
+    public PenjualanAdapter(Context context, List<Ent_Barang> barangList) {
         this.context = context;
         this.barangList = barangList;
         crud = new CRUD(context);
+        listTemporary = new ListTemporary();
     }
 
     @Override
@@ -38,6 +47,7 @@ public class PenjualanAdapter extends RecyclerView.Adapter<PenjualanAdapter.Hold
 
     @Override
     public void onBindViewHolder(Holder holder, int position) {
+
         if (Integer.parseInt((String) holder.tvJumlah.getText()) == 0) {
             holder.btnTambah.setVisibility(View.VISIBLE);
             holder.lnAfter.setVisibility(View.GONE);
@@ -56,6 +66,14 @@ public class PenjualanAdapter extends RecyclerView.Adapter<PenjualanAdapter.Hold
                 holder.btnTambah.setVisibility(View.GONE);
                 holder.lnAfter.setVisibility(View.VISIBLE);
                 holder.tvJumlah.setText("1");
+                Ent_Detail_Penjualan ent_detail_penjualan = new Ent_Detail_Penjualan();
+                ent_detail_penjualan.setFaktur_penjualan("a");
+                ent_detail_penjualan.setKode_barang(barangList.get(position).getKode_barang());
+                ent_detail_penjualan.setHarga_jual(barangList.get(position).getHarga_jual());
+                ent_detail_penjualan.setJumlah("1");
+                ent_detail_penjualan.setTotal(barangList.get(position).getHarga_jual());
+                listTemporary.listDetailPenjualan.add(ent_detail_penjualan);
+                listTemporary.total = listTemporary.total + Integer.parseInt(barangList.get(position).getHarga_jual());
             }
         });
 
@@ -65,6 +83,13 @@ public class PenjualanAdapter extends RecyclerView.Adapter<PenjualanAdapter.Hold
                 int jumlah = Integer.parseInt((String) holder.tvJumlah.getText());
                 jumlah++;
                 holder.tvJumlah.setText(String.valueOf(jumlah));
+                for (int i = 0; i < listTemporary.listDetailPenjualan.size(); i++) {
+                    if (listTemporary.listDetailPenjualan.get(i).getKode_barang().equals(barangList.get(position).getKode_barang())) {
+                        listTemporary.listDetailPenjualan.get(i).setJumlah(String.valueOf(jumlah));
+                        listTemporary.listDetailPenjualan.get(i).setTotal(String.valueOf(Integer.parseInt(barangList.get(position).getHarga_jual()) * jumlah));
+                        listTemporary.total = listTemporary.total + Integer.parseInt(barangList.get(position).getHarga_jual());
+                    }
+                }
             }
         });
 
@@ -77,6 +102,19 @@ public class PenjualanAdapter extends RecyclerView.Adapter<PenjualanAdapter.Hold
                 if (jumlah == 0) {
                     holder.btnTambah.setVisibility(View.VISIBLE);
                     holder.lnAfter.setVisibility(View.GONE);
+                    for (int i = 0; i < listTemporary.listDetailPenjualan.size(); i++) {
+                        if (listTemporary.listDetailPenjualan.get(i).getKode_barang().equals(barangList.get(position).getKode_barang())) {
+                            listTemporary.listDetailPenjualan.remove(i);
+                            listTemporary.total = listTemporary.total - Integer.parseInt(barangList.get(position).getHarga_jual());
+                        }
+                    }
+                }
+                for (int i = 0; i < listTemporary.listDetailPenjualan.size(); i++) {
+                    if (listTemporary.listDetailPenjualan.get(i).getKode_barang().equals(barangList.get(position).getKode_barang())) {
+                        listTemporary.listDetailPenjualan.get(i).setJumlah(String.valueOf(jumlah));
+                        listTemporary.listDetailPenjualan.get(i).setTotal(String.valueOf(Integer.parseInt(barangList.get(position).getHarga_jual()) * jumlah));
+                        listTemporary.total = listTemporary.total - Integer.parseInt(barangList.get(position).getHarga_jual());
+                    }
                 }
             }
         });
@@ -89,9 +127,8 @@ public class PenjualanAdapter extends RecyclerView.Adapter<PenjualanAdapter.Hold
     }
 
     public class Holder extends RecyclerView.ViewHolder {
-        private TextView tvNama, tvHarga, tvStok, tvJumlah, tvTambah, tvKurang;
+        private TextView tvNama, tvHarga, tvStok, tvJumlah, tvTambah, tvKurang, btnTambah;
         private ImageView imageView;
-        private Button btnTambah;
         private LinearLayout lnList, lnAfter;
 
         public Holder(@NonNull View itemView) {

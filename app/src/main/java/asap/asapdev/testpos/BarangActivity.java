@@ -18,10 +18,10 @@ import asap.asapdev.testpos.SQLite.CRUD;
 public class BarangActivity extends AppCompatActivity {
     private static final String TAG = "BarangActivity";
     private RecyclerView rvBarang;
-    RecyclerView.LayoutManager layoutManager;
+    private RecyclerView.LayoutManager layoutManager;
     private FloatingActionButton fabTambahBarang;
-    CRUD crud;
-    BarangAdapter adapter;
+    private CRUD crud;
+    private BarangAdapter adapter;
 
     @SuppressLint("MissingInflatedId")
     @Override
